@@ -185,6 +185,7 @@ local function setup_user_commands()
             desc = "Enables Sunglasses across all windows in vim session"
         }
     )
+    logger.debug("Setting up SunglassesRefresh command")
     vim.api.nvim_create_user_command(
         "SunglassesRefresh", function() get_all_highlights(true) end,
         {
