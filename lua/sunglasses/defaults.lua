@@ -3,7 +3,7 @@ local CONSTANTS = {
 local defaults = {
     filter_percent = .65,
     filter_type = "SHADE",
-    log_level = "WARN",
+    log_level = "ERROR",
     excluded_filetypes = {
         "dashboard",
         "lspsagafinder",
