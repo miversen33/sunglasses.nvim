@@ -216,8 +216,8 @@ require("sunglasses").setup({
 ```
 
 ### Config.filter_percent
-Version Added: 0.1
-Default: .65
+Version Added: 0.1  
+Default: .65  
 
 This is the percentage to modify inactive buffer's highlights. This value must
 be between 0 and 1 and is clamped as such. An example of how to use this is
@@ -233,8 +233,8 @@ require("sunglasses").setup(sunglasses_options)
 ```
 
 ### Config.filter_type
-Version Added: 0.1
-Default: "SHADE"
+Version Added: 0.1  
+Default: "SHADE"  
 
 This is the kind of filter to apply to inactive buffers. Valid filter_types
 are
@@ -253,8 +253,8 @@ require("sunglasses").setup(sunglasses_options)
 ```
 
 ### Config.log_level
-Version Added: 0.1
-Default: "ERROR"
+Version Added: 0.1  
+Default: "ERROR"  
 
 This is the level to filter all logs against. This means that logs with a
 level under "ERROR" will not be written to the file. If you are looking to
@@ -291,8 +291,8 @@ require("sunglasses").setup(sunglasses_options)
 ```
 
 ### Config.refresh_timer
-Version Added: 0.1
-Default: 5
+Version Added: 0.1  
+Default: 5  
 
 This tells sunglasses how often (in seconds) to refresh its internal
 highlights cache. This is how sunglasses is able to deal with highlight groups
@@ -308,8 +308,8 @@ require("sunglasses").setup(refresh_timer)
 ```
 
 ### Config.excluded_filetypes
-Version Added: 0.1
-Default:
+Version Added: 0.1  
+Default:  
 ```lua
 -- lua
 {
@@ -365,7 +365,7 @@ require("sunglasses").setup(sunglasses_options)
 ```
 
 ### Config.excluded_highlights
-Version Added: 0.1
+Version Added: 0.1  
 Default:
 ```lua
 -- lua
