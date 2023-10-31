@@ -20,7 +20,6 @@ local defaults = {
         "sagafinder",
         "better_term",
         "fugitiveblame",
-        "qf",
         "starter",
         "NeogitPopup",
         "NeogitStatus",
