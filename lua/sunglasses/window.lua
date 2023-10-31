@@ -9,7 +9,6 @@ local Window = {
     window = -1,
     buffer = -1,
     hl_namespace = 0,
-    disabled = false,
     inactive_hls = "",
     active_hls = "",
     excluded_filetypes = {},
@@ -62,6 +61,7 @@ function Window:new(window_options)
     setmetatable(new_window, self)
     self.__index = self
     new_window:config(window_options)
+    new_window:enable()
     windows[window_options.window] = new_window
     return new_window
 end
@@ -133,7 +133,7 @@ function Window:can_shade()
     if global_disabled then
         return "globally disabled"
     end
-    if self.disabled then
+    if vim.api.nvim_win_get_var(self.window, 'SunglassesDisabled') then
         return "currently disabled"
     end
     if not self.inactive_hls and self.hl_namespace ~= 0 then
@@ -193,11 +193,11 @@ function Window:unshade(opts)
 end
 
 function Window:disable()
-    self.disabled = true
+    vim.api.nvim_win_set_var(self.window, 'SunglassesDisabled', true)
 end
 
 function Window:enable()
-    self.disabled = false
+    vim.api.nvim_win_set_var(self.window, 'SunglassesDisabled', false)
 end
 
 if not configured then

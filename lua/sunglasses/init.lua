@@ -23,7 +23,7 @@ local function setup_hl_namespace()
 end
 
 local function get_all_highlights(force)
-    logger.trace("Gathering all current highlights")
+    logger.trace3("Gathering all current highlights")
     local user_config = defaults.get_config()
     local highlights = vim.api.nvim_get_hl(0, {})
     local is_same = true
@@ -185,10 +185,35 @@ local function setup_user_commands()
             desc = "Enables Sunglasses across all windows in vim session"
         }
     )
+    logger.debug("Setting up SunglassesRefresh command")
     vim.api.nvim_create_user_command(
         "SunglassesRefresh", function() get_all_highlights(true) end,
         {
             desc = "Tells Sunglasses to refresh its shaded highlight groups."
+        }
+    )
+    logger.debug("Setting up SunglassesPause command")
+    vim.api.nvim_create_user_command(
+        "SunglassesPause", function()
+            local window = Window.get(-1)
+            if not window then return end
+            logger.info("Manually stopping sunglasses on", window.window)
+            window:disable()
+        end,
+        {
+            desc = "Pauses Sunglasses Auto Adjuster for this window"
+        }
+    )
+    logger.debug("Setting up SunglassesResume command")
+    vim.api.nvim_create_user_command(
+        "SunglassesResume", function()
+            local window = Window.get(-1)
+            if not window then return end
+            logger.info("Manually starting sunglasses on", window.window)
+            window:enable()
+        end,
+        {
+            desc = "Resumes Sunglasses Auto Adjuster for this window"
         }
     )
 end
