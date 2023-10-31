@@ -34,7 +34,8 @@ Pictures are worth a thousand words (or however many are in your buffers ;) )
 
 ### Shaded
 
-![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/c386a2eb-80f3-4010-8be8-a760b1c45e7f)
+![vscode.nvim shaded](https://github.com/miversen33/sunglasses.nvim/assets/2640668/97afcb69-369e-41cd-aeab-286a6a11c5d2)
+
 ```lua
 -- Config: https://github.com/miversen33
 {
@@ -44,7 +45,7 @@ Pictures are worth a thousand words (or however many are in your buffers ;) )
 ```
 
 ### Tinted
-![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/c891821c-c715-474d-8c92-1f56723e7fb2)
+![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/e42d0d93-ca9e-4e0d-a475-bcb2d5103b2d)
 ```lua
 -- Config: https://github.com/miversen33
 {
@@ -57,7 +58,7 @@ Pictures are worth a thousand words (or however many are in your buffers ;) )
 [Theme](https://github.com/catppuccin/nvim)
 
 ### Shaded
-![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/985a448c-6cff-4e7d-8fea-f323785ad375)
+![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/686f0745-d01e-4074-8ba7-fdf6873347bf)
 ```lua
 -- Config: https://github.com/miversen33
 {
@@ -67,7 +68,7 @@ Pictures are worth a thousand words (or however many are in your buffers ;) )
 ```
 
 ### Tinted
-![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/94499a13-7359-45b8-8f56-73d2f76deffc)
+![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/df0ef0db-7068-4d10-bace-a6980f7624c0)
 ```lua
 -- Config: https://github.com/miversen33
 {
@@ -78,7 +79,7 @@ Pictures are worth a thousand words (or however many are in your buffers ;) )
 
 **TokyoNight**
 ### Shaded
-![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/0fa899cf-a32f-4e62-a101-a6068159add4)
+![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/ac2a4be6-6af4-42d1-ba90-148e9420d508)
 ```lua
 -- Config: https://github.com/miversen33
 {
@@ -88,7 +89,7 @@ Pictures are worth a thousand words (or however many are in your buffers ;) )
 ```
 
 ### Tinted
-![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/71d1060b-293a-444a-89c3-5e825ad2d744)
+![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/24c286eb-19f6-488f-a65b-1d0e06d5cfe2)
 ```lua
 -- Config: https://github.com/miversen33
 {
