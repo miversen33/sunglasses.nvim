@@ -1,0 +1,328 @@
+*sunglasses.nvim*                   Putting Shades on what you aren't focused on
+
+================================================================================
+INTRODUCTION
+Sunglasses.nvim is a plugin that will modify the highlights in "inactive"
+buffers, making it easier to tell which buffer is currently the active buffer.
+
+Getting Started:
+1) Include Sunglasses in your `init.lua`
+>lua
+    -- lua
+    require("sunglasses").setup()
+<
+>vim
+    " Vim
+    lua <<EOF
+        require("sunglasses").setup()
+EOF
+>
+2) Profit??
+
+Details:
+Sunglasses abuses highlight groups and auto commands to present a sort of
+"modified" set of highlights for inactive buffers. If you're a nerd, checkout
+|Sunglasses Nerd Details| for details on how sunglasses does its abuse.
+
+                                                              *sunglasses.setup*
+Setup ~
+See |sunglasses.config|
+
+                                                             *sunglasses.config*
+Config ~
+Sunglasses accepts a table that can contain any of the following items
+
+>lua
+    -- lua
+    local sunglasses_options = {
+        filter_percent = 0.65,
+        filter_type = "SHADE",
+        log_level = "ERROR",
+        excluded_filetypes = {
+            "dashboard",
+            "lspsagafinder",
+            "packer",
+            "checkhealth",
+            "mason",
+            "NvimTree",
+            "neo-tree",
+            "plugin",
+            "lazy",
+            "TelescopePrompt",
+            "alpha",
+            "toggleterm",
+            "sagafinder",
+            "better_term",
+            "fugitiveblame",
+            "starter",
+            "NeogitPopup",
+            "NeogitStatus",
+            "DiffviewFiles",
+            "DiffviewFileHistory",
+            "DressingInput",
+            "spectre_panel",
+            "zsh",
+            "registers",
+            "startuptime",
+            "OverseerList",
+            "Navbuddy",
+            "noice",
+            "notify",
+            "saga_codeaction",
+            "sagarename"
+        },
+        excluded_highlights = {
+            "WinSeparator",
+            {"lualine_.*", glob = true},
+        }
+    }
+
+    -- The above table will is the default configuration.
+    -- If you do not wish to set any configuration options, you can simply
+    -- pass nil into your setup
+    require("sunglasses").setup()
+    -- Or you can provide your own values. Please configure your
+    -- options by looking at each option available and setting it
+    require("sunglasses").setup({
+        filter_percent = 0.65,
+        filter_type = "SHADE",
+        log_level = "ERROR",
+        excluded_filetypes = {
+            "dashboard",
+            "lspsagafinder",
+            "packer",
+            "checkhealth",
+            "mason",
+            "NvimTree",
+            "neo-tree",
+            "plugin",
+            "lazy",
+            "TelescopePrompt",
+            "alpha",
+            "toggleterm",
+            "sagafinder",
+            "better_term",
+            "fugitiveblame",
+            "starter",
+            "NeogitPopup",
+            "NeogitStatus",
+            "DiffviewFiles",
+            "DiffviewFileHistory",
+            "DressingInput",
+            "spectre_panel",
+            "zsh",
+            "registers",
+            "startuptime",
+            "OverseerList",
+            "Navbuddy",
+            "noice",
+            "notify",
+            "saga_codeaction",
+            "sagarename"
+        },
+        excluded_highlights = {
+            "WinSeparator",
+            {"lualine_.*", glob = true},
+        }
+    })
+>
+
+                                              *sunglasses.config.filter_percent*
+Config.filter_percent ~
+Version Added: 0.1
+Default: .65
+
+This is the percentage to modify inactive buffer's highlights. This value must
+be between 0 and 1 and is clamped as such. An example of how to use this is
+as follows
+
+>lua
+    -- lua
+    local sunglasses_options = {
+        filter_percent = 0.65
+    }
+
+    require("sunglasses").setup(sunglasses_options)
+>
+
+                                                 *sunglasses.config.filter_type*
+Config.filter_type ~
+Version Added: 0.1
+Default: "SHADE"
+
+This is the kind of filter to apply to inactive buffers. Valid filter_types
+are
+- "SHADE"
+- "TINT"
+
+An example of how to use this is as follows
+
+>lua
+    -- lua
+    local sunglasses_options = {
+        filter_type = "SHADE"
+    }
+
+    require("sunglasses").setup(sunglasses_options)
+>
+
+                                                   *sunglasses.config.log_level*
+Config.log_level ~
+Version Added: 0.1
+Default: "ERROR"
+
+This is the level to filter all logs against. This means that logs with a
+level under "ERROR" will not be written to the file. If you are looking to
+submit a bug report, please set this to a lower level.
+
+Your sunglasses log can be located with the following command
+>lua
+    -- lua
+    print(vim.fn.stdpath('log') .. '/sunglasses.log')
+>
+
+Below are a list of valid log levels (in filter order). Anything lower than the
+level in this list will be filtered at that level. As an example, with a level
+of "ERROR" (the default), logs of level "WARNING" will be filtered
+
+- "CRITICAL"
+- "ERROR"
+- "WARNING"
+- "INFO"
+- "DEBUG"
+- "TRACE"
+- "TRACE2"
+- "TRACE3"
+
+**** Be aware, any of the trace levels will very quickly produce lots of logs
+
+An example of how to set this is as follows
+>lua
+    -- lua
+    local sunglasses_options = {
+        filter_level = "ERROR"
+    }
+    require("sunglasses").setup(sunglasses_options)
+>
+
+                                          *sunglasses.config.excluded_filetypes*
+Config.excluded_filetypes ~
+Version Added: 0.1
+Default:
+>lua
+    -- lua
+    {
+        "dashboard",
+        "lspsagafinder",
+        "packer",
+        "checkhealth",
+        "mason",
+        "NvimTree",
+        "neo-tree",
+        "plugin",
+        "lazy",
+        "TelescopePrompt",
+        "alpha",
+        "toggleterm",
+        "sagafinder",
+        "better_term",
+        "fugitiveblame",
+        "starter",
+        "NeogitPopup",
+        "NeogitStatus",
+        "DiffviewFiles",
+        "DiffviewFileHistory",
+        "DressingInput",
+        "spectre_panel",
+        "zsh",
+        "registers",
+        "startuptime",
+        "OverseerList",
+        "Navbuddy",
+        "noice",
+        "notify",
+        "saga_codeaction",
+        "sagarename"
+    },
+>
+
+This is a list of filetypes to be excluded when shading inactive windows. 
+
+**** If you are making changes to this table, consider submitting a PR to
+**** update it for everyone instead!
+
+An example of how to set this is as follows
+
+>lua
+    -- lua
+    local sunglasses_options = {
+        excluded_filetypes = {
+            "lazy"
+        }
+    }
+    require("sunglasses").setup(sunglasses_options)
+>
+
+                                         *sunglasses.config.excluded_highlights*
+Config.excluded_highlights ~
+Version Added: 0.1
+Default:
+>lua
+    -- lua
+    {
+        "WinSeparator",
+        {"lualine_.*", glob = true},
+    }
+>
+This is a list of highlights to exclude modifying on inactive windows.
+
+**** If you are making changes to this table, consider submitting a PR to
+**** update it for everyone instead!
+
+Entries in this table can be either a string or a table (as shown above).
+If its a string, it is treated as the exact name of the highlight to exclude.
+If it is in table form (and has the `glob = true` value in the table), then
+it is treated as a glob in which all highlights that *match* the glob are
+excluded.
+
+You may be wondering why lualine is included here. It seems that vim will
+apply the namespace highlight to lualine in the event that all other windows
+in the tabpage are already in that namespace. That makes lualine look super
+weird, so this fixes that.
+
+An example of how to set this is as follows
+>lua
+    -- lua
+    local sunglasses_options = {
+        excluded_highlights = {
+            "WinSeparator"
+        }
+    }
+    require("sunglasses").setup(sunglasses_options)
+>
+
+                                                                  *SunglassesOn*
+:SunglassesOn ~
+Version Added: 0.1
+Valid Args: false, true
+Related: |SunglassesOff|
+
+Command SunglassesOn will shade the buffer your cursor is currently in.
+
+If true is passed with the command, this will force shade the buffer.
+This means that if the filetype of the buffer is marked as excluded, the buffer
+will still be shaded. This force is only temporary however. In general this
+means that if a window contains an excluded filetype and you force shade it,
+the shade will only last until the next time sunglasses attempts to shade the
+buffer, in which case it will not be shaded.
+
+                                                                 *SunglassesOff*
+:SunglassesOff ~
+Version Added: 0.1
+Related: |SunglassesOn|
+
+Command SunglassesOff will unshade the buffer your cursor is currently in.
+
+                                                       *Sunglasses Nerd Details*
+
+vim:tw=80:ts=8:ft=help:norl:
