@@ -56,6 +56,7 @@ end
 
 function M.store_config(user_config)
     M.__user_config = user_config
+    M.__user_config.filter_percent = math.max(math.min(M.__user_config.filter_percent, 1), 0)
 end
 
 function M.get_config()
