@@ -23,7 +23,7 @@ local function setup_hl_namespace()
 end
 
 local function get_all_highlights(force)
-    logger.info("Gathering all current highlights")
+    logger.trace("Gathering all current highlights")
     local user_config = defaults.get_config()
     local highlights = vim.api.nvim_get_hl(0, {})
     local is_same = true
