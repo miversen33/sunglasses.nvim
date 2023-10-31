@@ -127,7 +127,7 @@ Sunglasses accepts a table that can contain any of the following items
             {"lualine_.*", glob = true},
         }
     })
->
+><
 
                                               *sunglasses.config.filter_percent*
 Config.filter_percent ~
@@ -145,7 +145,7 @@ as follows
     }
 
     require("sunglasses").setup(sunglasses_options)
->
+><
 
                                                  *sunglasses.config.filter_type*
 Config.filter_type ~
@@ -205,7 +205,7 @@ An example of how to set this is as follows
         filter_level = "ERROR"
     }
     require("sunglasses").setup(sunglasses_options)
->
+><
 
                                                *sunglasses.config.refresh_timer*
 Config.refresh_timer ~
@@ -223,9 +223,9 @@ An example of how to set this is as follows
         refresh_timer = 5
     }
     require("sunglasses").setup(refresh_timer)
->
+><
 
-                                          *sunglasses.config.excluded_filetypes*
+                                         *sunglasses.config.excluded_filetypes*
 Config.excluded_filetypes ~
 Version Added: 0.1
 Default:
@@ -281,7 +281,7 @@ An example of how to set this is as follows
         }
     }
     require("sunglasses").setup(sunglasses_options)
->
+><
 
                                          *sunglasses.config.excluded_highlights*
 Config.excluded_highlights ~
@@ -319,9 +319,9 @@ An example of how to set this is as follows
         }
     }
     require("sunglasses").setup(sunglasses_options)
->
+><
 
-                                                                  *SunglassesOn*
+                                                                 *SunglassesOn*
 :SunglassesOn ~
 Version Added: 0.1
 Valid Args: false, true
@@ -369,5 +369,8 @@ Note, sunglasses by default refreshes its highlights based on
 
 
                                                        *Sunglasses Nerd Details*
+Nerds ~
+I promise there will be stuff here eventually
+
 
 vim:tw=80:ts=8:ft=help:norl:
