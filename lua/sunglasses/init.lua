@@ -137,6 +137,20 @@ local function setup_user_commands()
             desc = "Takes off sunglasses on the current window"
         }
     )
+    logger.debug("Setting up SunglassesDisable command")
+    vim.api.nvim_create_user_command(
+        "SunglassesDisable", Window.global_disable,
+        {
+            desc = "Disables Sunglasses completely for this vim session"
+        }
+    )
+    logger.debug("Setting up SunglassesEnable command")
+    vim.api.nvim_create_user_command(
+        "SunglassesEnable", Window.global_enable,
+        {
+            desc = "Enables Sunglasses across all windows in vim session"
+        }
+    )
 end
 
 function M.setup(opts)

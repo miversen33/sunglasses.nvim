@@ -2,6 +2,7 @@ local COMPAT = require('sunglasses.compat')
 local logger = require("sunglasses.log")
 
 local configured = false
+local global_disabled = false
 local windows = {}
 local Window = {
     name = "NA",
@@ -21,6 +22,29 @@ function Window.get(window_id)
         window_id = vim.api.nvim_get_current_win()
     end
     return windows[window_id]
+end
+
+function Window.global_disable()
+    logger.info("Disabling Sunglasses across all windows")
+    for _, winnr in ipairs(vim.api.nvim_list_wins()) do
+        local window = Window.get(winnr)
+        if window then
+            window:unshade()
+        end
+    end
+    global_disabled = true
+end
+
+function Window.global_enable()
+    logger.info("Enabling Sunglasses across all windows (except current)")
+    local current_window = vim.api.nvim_get_current_win()
+    for _, winnr in ipairs(vim.api.nvim_list_wins()) do
+        local window = Window.get(winnr)
+        if window and winnr ~= current_window then
+            window:shade()
+        end
+    end
+    global_disabled = false
 end
 
 function Window:new(window_options)
@@ -106,6 +130,9 @@ function Window:is_shaded()
 end
 
 function Window:can_shade()
+    if global_disabled then
+        return "globally disabled"
+    end
     if self.disabled then
         return "currently disabled"
     end
