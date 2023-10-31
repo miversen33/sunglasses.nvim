@@ -12,7 +12,8 @@ local M = {
     __hl_namespace_name = 'sunglasses',
     active_hls = nil,
     inactive_hls = nil,
-    __last_hl_update = -1
+    __last_hl_update = -1,
+    version = 0.1
 }
 
 local function setup_hl_namespace()
