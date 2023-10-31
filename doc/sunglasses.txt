@@ -323,6 +323,21 @@ Related: |SunglassesOn|
 
 Command SunglassesOff will unshade the buffer your cursor is currently in.
 
+                                                              *SunglassesEnable*
+:SunglassesEnable ~
+Version Added: 0.1
+Related: |SunglassesDisable|
+
+Command SunglassesEnable will shade all inactive buffers (while obeying
+excluded filetypes)
+
+                                                             *SunglassesDisable*
+:SunglassesDisable ~
+Version Added: 0.1
+Related: |SunglassesEnable|
+
+Command SunglassesDisable will unshade all buffers
+
                                                        *Sunglasses Nerd Details*
 
 vim:tw=80:ts=8:ft=help:norl:
