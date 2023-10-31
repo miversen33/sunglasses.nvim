@@ -2,21 +2,6 @@
 
 Put on your shades so you only see what you care about
 
-<!-- Insert Gallery Screenshots with a handful of themes here -->
-
-## Features
-
-- Able to be used with **any** neovim _or_ vim theme
-- Easy to Setup
-- Easy to Customize
-- No external dependencies
-- Works with Sessions
-- _Only a minimal amount of shenanigans happening!_
-
-## Requirements
-
-- Currently only supports neovim 0.9 newer
-
 ## Installation
 
 ### Lazy
@@ -36,8 +21,97 @@ off your startup time so here ya go
 
 ```lua
 require("lazy").setup({"miversen33/sunglasses.nvim", config = true, event = "UIEnter"})
-
 ```
+
+## Pictures
+<sup></sup>Feel to submit a pr to add more images to this. At least until I get tired of updating it<sub></sub>
+
+Pictures are worth a thousand words (or however many are in your buffers ;) )
+
+**Vscode.nvim**  
+[Theme](https://github.com/Mofiqul/vscode.nvim)
+[Dotfiles](https://github.com/miversen33/miversen-dotfiles/blob/713b446f5665dd471f76da5fa28a726d1315dbf8/editors/nvim/lua/plugins/ui/)
+
+### Shaded
+
+![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/c386a2eb-80f3-4010-8be8-a760b1c45e7f)
+```lua
+-- Config: https://github.com/miversen33
+{
+    filter_type = "SHADE",
+    filter_percent = .65
+}
+```
+
+### Tinted
+![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/c891821c-c715-474d-8c92-1f56723e7fb2)
+```lua
+-- Config: https://github.com/miversen33
+{
+    filter_type = "TINT",
+    filter_percent = .65
+}
+```
+
+**Catppuccin**  
+[Theme](https://github.com/catppuccin/nvim)
+
+### Shaded
+![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/985a448c-6cff-4e7d-8fea-f323785ad375)
+```lua
+-- Config: https://github.com/miversen33
+{
+    filter_type = "SHADE",
+    filter_percent = .65
+}
+```
+
+### Tinted
+![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/94499a13-7359-45b8-8f56-73d2f76deffc)
+```lua
+-- Config: https://github.com/miversen33
+{
+    filter_type = "TINT",
+    filter_percent = .65
+}
+```
+
+**TokyoNight**
+### Shaded
+![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/0fa899cf-a32f-4e62-a101-a6068159add4)
+```lua
+-- Config: https://github.com/miversen33
+{
+    filter_type = "SHADE",
+    filter_percent = .65
+}
+```
+
+### Tinted
+![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/71d1060b-293a-444a-89c3-5e825ad2d744)
+```lua
+-- Config: https://github.com/miversen33
+{
+    filter_type = "TINT",
+    filter_percent = .65
+}
+```
+
+<!-- Insert Gallery Screenshots with a handful of themes here -->
+
+## Features
+
+- Able to be used with **any** neovim _or_ vim theme
+- Works with Sessions
+- Works with Transparent buffers
+- Easy to Setup
+- Easy to Customize
+- No external dependencies
+- _Only a minimal amount of shenanigans happening!_
+
+## Requirements
+
+- Currently only supports neovim 0.9 newer
 
 ## Configuration
 
