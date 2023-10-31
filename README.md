@@ -10,6 +10,7 @@ Put on your shades so you only see what you care about
 - Easy to Setup
 - Easy to Customize
 - No external dependencies
+- Works with Sessions
 - _Only a minimal amount of shenanigans happening!_
 
 ## Requirements
