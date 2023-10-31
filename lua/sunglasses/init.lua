@@ -10,6 +10,7 @@ local M = {
     __augroup_name = "Sunglasses",
     __hl_namespace = nil,
     __hl_namespace_name = 'sunglasses',
+    __timer = nil,
     active_hls = nil,
     inactive_hls = nil,
     __last_hl_update = -1,
@@ -31,15 +32,34 @@ local function get_all_highlights(force)
         if excluded or (M.highlights[highlights_name] and not force) then
             goto continue
         end
-        is_same = false
-        M.highlights[highlights_name] = Highlight:new({
+        local new_highlight = Highlight:new({
             highlight = highlight,
             namespace = M.__hl_namespace,
             name = highlights_name,
             adjustment = user_config.filter_type,
             adjustment_level = user_config.filter_percent
         })
+        M.highlights[highlights_name] = new_highlight
         ::continue::
+    end
+    local purged_hls = {}
+    for hl, _ in pairs(M.highlights) do
+        local found_match = false
+        for current_highlight, _ in pairs(highlights) do
+            if current_highlight == hl then
+                found_match = true
+                break
+            end
+        end
+        if not found_match then
+            table.insert(purged_hls, hl)
+        end
+    end
+    if #purged_hls > 0 then
+        logger.trace("Purging", #purged_hls, "unused highlights")
+        for _, hl in ipairs(purged_hls) do
+            M.highlights[hl] = nil
+        end
     end
     -- Nothing changed so return
     if is_same then return end
@@ -58,6 +78,17 @@ local function get_all_highlights(force)
     end
 end
 
+local function setup_timer(frequency)
+    if M.__timer then return end
+    logger.info("Setting Update Highlight Timer for", frequency, "seconds")
+    frequency = frequency * 1000
+    local callback = function()
+        get_all_highlights(false)
+    end
+    M.__timer = COMPAT.luv.new_timer()
+    M.__timer:start(frequency, frequency, function() vim.schedule(callback) end)
+end
+
 local function setup_auto_commands()
     logger.debug("Setting up auto commands")
     if not M.__augroup_id then
@@ -70,6 +101,9 @@ local function setup_auto_commands()
         desc = "Sunglasses Lazy Setup",
         callback = function()
             get_all_highlights()
+            if defaults.get_config().refresh_timer then
+                setup_timer(defaults.get_config().refresh_timer)
+            end
         end
     })
     logger.debug("Setting up WinEnter Command")
@@ -149,6 +183,12 @@ local function setup_user_commands()
         "SunglassesEnable", Window.global_enable,
         {
             desc = "Enables Sunglasses across all windows in vim session"
+        }
+    )
+    vim.api.nvim_create_user_command(
+        "SunglassesRefresh", function() get_all_highlights(true) end,
+        {
+            desc = "Tells Sunglasses to refresh its shaded highlight groups."
         }
     )
 end

@@ -4,6 +4,7 @@ local defaults = {
     filter_percent = .65,
     filter_type = "SHADE",
     log_level = "ERROR",
+    refresh_timer = 5,
     excluded_filetypes = {
         "dashboard",
         "lspsagafinder",
@@ -57,6 +58,11 @@ end
 function M.store_config(user_config)
     M.__user_config = user_config
     M.__user_config.filter_percent = math.max(math.min(M.__user_config.filter_percent, 1), 0)
+    if M.__user_config.refresh_timer <= 0 then
+        M.__user_config.refresh_timer = nil
+    else
+        M.__user_config.refresh_timer = math.max(M.__user_config.refresh_timer, 1)
+    end
 end
 
 function M.get_config()

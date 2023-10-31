@@ -38,6 +38,7 @@ Sunglasses accepts a table that can contain any of the following items
         filter_percent = 0.65,
         filter_type = "SHADE",
         log_level = "ERROR",
+        refresh_timer = 5,
         excluded_filetypes = {
             "dashboard",
             "lspsagafinder",
@@ -87,6 +88,7 @@ Sunglasses accepts a table that can contain any of the following items
         filter_percent = 0.65,
         filter_type = "SHADE",
         log_level = "ERROR",
+        refresh_timer = 5,
         excluded_filetypes = {
             "dashboard",
             "lspsagafinder",
@@ -205,6 +207,24 @@ An example of how to set this is as follows
     require("sunglasses").setup(sunglasses_options)
 >
 
+                                               *sunglasses.config.refresh_timer*
+Config.refresh_timer ~
+Version Added: 0.1
+Default: 5
+
+This tells sunglasses how often (in seconds) to refresh its internal
+highlights cache. This is how sunglasses is able to deal with highlight groups
+that are dynamically created over time.
+
+An example of how to set this is as follows
+>lua
+    -- lua
+    local sunglasses_options = {
+        refresh_timer = 5
+    }
+    require("sunglasses").setup(refresh_timer)
+>
+
                                           *sunglasses.config.excluded_filetypes*
 Config.excluded_filetypes ~
 Version Added: 0.1
@@ -243,7 +263,7 @@ Default:
         "notify",
         "saga_codeaction",
         "sagarename"
-    },
+    }
 >
 
 This is a list of filetypes to be excluded when shading inactive windows. 
@@ -337,6 +357,16 @@ Version Added: 0.1
 Related: |SunglassesEnable|
 
 Command SunglassesDisable will unshade all buffers
+
+                                                            *SunglassesRefresh*
+:SunglassesRefresh ~
+Version Added: 0.1
+Related: |Config.refresh_timer|
+
+Command to manually refresh the highlight groups modified by sunglasses.
+Note, sunglasses by default refreshes its highlights based on
+|Config.refresh_timer|
+
 
                                                        *Sunglasses Nerd Details*
 
