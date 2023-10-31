@@ -400,3 +400,8 @@ local sunglasses_options = {
 }
 require("sunglasses").setup(sunglasses_options)
 ```
+
+## Related Plugins
+- [Shade.nvim](https://github.com/sunjon/Shade.nvim)
+- [tint.nvim](https://github.com/levouh/tint.nvim)
+- [catppuccin/nvim](https://github.com/catppuccin/nvim)
