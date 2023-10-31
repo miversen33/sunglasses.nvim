@@ -36,15 +36,15 @@ function Window.global_disable()
 end
 
 function Window.global_enable()
+    global_disabled = false
     logger.info("Enabling Sunglasses across all windows (except current)")
     local current_window = vim.api.nvim_get_current_win()
     for _, winnr in ipairs(vim.api.nvim_list_wins()) do
         local window = Window.get(winnr)
-        if window and winnr ~= current_window then
+        if window and winnr ~= current_window and window:can_shade() == true then
             window:shade()
         end
     end
-    global_disabled = false
 end
 
 function Window:new(window_options)
