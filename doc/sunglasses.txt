@@ -367,6 +367,27 @@ Command to manually refresh the highlight groups modified by sunglasses.
 Note, sunglasses by default refreshes its highlights based on
 |Config.refresh_timer|
 
+                                                               *SunglassesPause*
+:SunglassesPause ~
+Version Added: 0.2
+Related: |SunglassesResume| |SunglassesDisable| |SunglassesOff|
+
+Command to manually exclude the window under the cursor from Sunglasses Auto
+Adjuster. This does _not_ persist through sessions
+
+                                                              *SunglassesResume*
+:SunglassesResume ~
+Version Added: 0.2
+Related: |SunglassesPause| |SunglassesEnable| |SunglassesOn|
+
+Command to manually unexclude (note, not the same as "include") the window
+under the cursor, allowing Sunglasses Auto Adjuster to continue adjusting it
+on window leave.
+
+Why is unexclude not the same as include? Well include would suggest that the
+window under the cursor will now be shaded on window leave, which is not the
+case. For that, you will need |SunglassesOn|. This simply undoes the pause set
+by |SunglassesPause|
 
                                                        *Sunglasses Nerd Details*
 Nerds ~

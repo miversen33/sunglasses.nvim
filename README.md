@@ -402,6 +402,69 @@ local sunglasses_options = {
 require("sunglasses").setup(sunglasses_options)
 ```
 
+## Commands
+
+### :SunglassesOn
+Version Added: 0.1  
+Valid Args: false, true  
+Related: [SunglassesOff](#sunglassesoff)  
+
+Command SunglassesOn will shade the buffer your cursor is currently in.
+
+If true is passed with the command, this will force shade the buffer.
+This means that if the filetype of the buffer is marked as excluded, the buffer
+will still be shaded. This force is only temporary however. In general this
+means that if a window contains an excluded filetype and you force shade it,
+the shade will only last until the next time sunglasses attempts to shade the
+buffer, in which case it will not be shaded.
+
+### :SunglassesOff
+Version Added: 0.1  
+Related: [SunglassesOn](#sunglasseson)  
+
+Command SunglassesOff will unshade the buffer your cursor is currently in.
+
+### :SunglassesEnable
+Version Added: 0.1  
+Related: [SunglassesDisable](#sunglassesdisable)  
+
+Command SunglassesEnable will shade all inactive buffers (while obeying
+excluded filetypes)
+
+### :SunglassesDisable
+Version Added: 0.1  
+Related: [SunglassesEnable](#sunglassesenable)
+
+Command SunglassesDisable will unshade all buffers
+
+### :SunglassesRefresh
+Version Added: 0.1  
+Related: [Config.refresh_timer](#configrefreshtimer)  
+
+Command to manually refresh the highlight groups modified by sunglasses.
+Note, sunglasses by default refreshes its highlights based on
+[Config.refresh_timer](#configrefreshtimer)
+
+### :SunglassesPause
+Version Added: 0.2  
+Related: [SunglassesResume](#sunglassesresume) [SunglassesDisable](#sunglassesdisable) [SunglassesOff](#sunglassesoff)  
+
+Command to manually exclude the window under the cursor from Sunglasses Auto
+Adjuster. This does _not_ persist through sessions
+
+### :SunglassesResume
+Version Added: 0.2  
+Related: [SunglassesPause](#sunglassespause) [SunglassesEnable](#sunglassesenable) [SunglassesOn](#sunglasseson)  
+
+Command to manually unexclude (note, not the same as "include") the window
+under the cursor, allowing Sunglasses Auto Adjuster to continue adjusting it
+on window leave.
+
+Why is unexclude not the same as include? Well include would suggest that the
+window under the cursor will now be shaded on window leave, which is not the
+case. For that, you will need [SunglassesOn](#sunglasseson). This simply undoes the pause set
+by [SunglassesPause](#sunglassespause)
+
 ## Related Plugins
 - [Shade.nvim](https://github.com/sunjon/Shade.nvim)
 - [tint.nvim](https://github.com/levouh/tint.nvim)

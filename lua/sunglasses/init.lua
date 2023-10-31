@@ -192,6 +192,30 @@ local function setup_user_commands()
             desc = "Tells Sunglasses to refresh its shaded highlight groups."
         }
     )
+    logger.debug("Setting up SunglassesPause command")
+    vim.api.nvim_create_user_command(
+        "SunglassesPause", function()
+            local window = Window.get(-1)
+            if not window then return end
+            logger.info("Manually stopping sunglasses on", window.window)
+            window:disable()
+        end,
+        {
+            desc = "Pauses Sunglasses Auto Adjuster for this window"
+        }
+    )
+    logger.debug("Setting up SunglassesResume command")
+    vim.api.nvim_create_user_command(
+        "SunglassesResume", function()
+            local window = Window.get(-1)
+            if not window then return end
+            logger.info("Manually starting sunglasses on", window.window)
+            window:enable()
+        end,
+        {
+            desc = "Resumes Sunglasses Auto Adjuster for this window"
+        }
+    )
 end
 
 function M.setup(opts)
