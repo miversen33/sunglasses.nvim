@@ -14,7 +14,7 @@ local M = {
     active_hls = nil,
     inactive_hls = nil,
     __last_hl_update = -1,
-    version = 0.2
+    version = "0.2.01"
 }
 
 local function setup_hl_namespace()

@@ -261,6 +261,7 @@ require("sunglasses").setup(sunglasses_options)
 
 ### Config.filter_type
 Version Added: 0.1  
+Version Updated: 0.2.01  
 Default: "SHADE"  
 
 This is the kind of filter to apply to inactive buffers. Valid filter_types
