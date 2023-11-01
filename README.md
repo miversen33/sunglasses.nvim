@@ -33,9 +33,7 @@ Pictures are worth a thousand words (or however many are in your buffers ;) )
 [Dotfiles](https://github.com/miversen33/miversen-dotfiles/blob/713b446f5665dd471f76da5fa28a726d1315dbf8/editors/nvim/lua/plugins/ui/)
 
 ### Shaded
-
-![vscode.nvim shaded](https://github.com/miversen33/sunglasses.nvim/assets/2640668/97afcb69-369e-41cd-aeab-286a6a11c5d2)
-
+![vscode.nvim shaded](https://github.com/miversen33/sunglasses.nvim/assets/2640668/4f77977e-6d01-4d18-9525-cee012fb69fa)
 ```lua
 -- Config: https://github.com/miversen33
 {
@@ -45,11 +43,21 @@ Pictures are worth a thousand words (or however many are in your buffers ;) )
 ```
 
 ### Tinted
-![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/e42d0d93-ca9e-4e0d-a475-bcb2d5103b2d)
+![vscode.nvim tinted](https://github.com/miversen33/sunglasses.nvim/assets/2640668/35c7948e-d163-490a-a063-887ba7674168)
 ```lua
 -- Config: https://github.com/miversen33
 {
     filter_type = "TINT",
+    filter_percent = .65
+}
+```
+
+### NOSYNTAX
+![vscode.nvim nosyntax](https://github.com/miversen33/sunglasses.nvim/assets/2640668/61aec001-eecd-4cda-a969-4708c7343e99)
+```lua
+-- Config: https://github.com/miversen33
+{
+    filter_type = "NOSYNTAX",
     filter_percent = .65
 }
 ```
@@ -58,28 +66,38 @@ Pictures are worth a thousand words (or however many are in your buffers ;) )
 [Theme](https://github.com/catppuccin/nvim)
 
 ### Shaded
-![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/686f0745-d01e-4074-8ba7-fdf6873347bf)
+![catppuccin shaded](https://github.com/miversen33/sunglasses.nvim/assets/2640668/686f0745-d01e-4074-8ba7-fdf6873347bf)
 ```lua
 -- Config: https://github.com/miversen33
 {
-    filter_type = "SHADE",
+    filter_type = "NOSYNTAX",
     filter_percent = .65
 }
 ```
 
 ### Tinted
-![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/df0ef0db-7068-4d10-bace-a6980f7624c0)
+![catppuccin tinted](https://github.com/miversen33/sunglasses.nvim/assets/2640668/df0ef0db-7068-4d10-bace-a6980f7624c0)
 ```lua
 -- Config: https://github.com/miversen33
 {
     filter_type = "TINT",
+    filter_percent = .65
+}
+```
+
+### NOSYNTAX
+![catppuccin nosyntax](https://github.com/miversen33/sunglasses.nvim/assets/2640668/c90754fc-75de-499b-8e65-118102b5250f)
+```lua
+-- Config: https://github.com/miversen33
+{
+    filter_type = "NOSYNTAX",
     filter_percent = .65
 }
 ```
 
 **TokyoNight**
 ### Shaded
-![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/ac2a4be6-6af4-42d1-ba90-148e9420d508)
+![tokyonight shaded](https://github.com/miversen33/sunglasses.nvim/assets/2640668/ac2a4be6-6af4-42d1-ba90-148e9420d508)
 ```lua
 -- Config: https://github.com/miversen33
 {
@@ -89,7 +107,7 @@ Pictures are worth a thousand words (or however many are in your buffers ;) )
 ```
 
 ### Tinted
-![image](https://github.com/miversen33/sunglasses.nvim/assets/2640668/24c286eb-19f6-488f-a65b-1d0e06d5cfe2)
+![tokyonight tinted](https://github.com/miversen33/sunglasses.nvim/assets/2640668/24c286eb-19f6-488f-a65b-1d0e06d5cfe2)
 ```lua
 -- Config: https://github.com/miversen33
 {
@@ -98,7 +116,16 @@ Pictures are worth a thousand words (or however many are in your buffers ;) )
 }
 ```
 
-<!-- Insert Gallery Screenshots with a handful of themes here -->
+### NOSYNTAX
+![tokyonight nosyntax](https://github.com/miversen33/sunglasses.nvim/assets/2640668/f0ea28ae-4474-417d-9ecc-06d5749a163a)
+```lua
+-- Config: https://github.com/miversen33
+{
+    filter_type = "NOSYNTAX",
+    filter_percent = .65
+}
+```
+
 
 ## Features
 
@@ -240,6 +267,16 @@ This is the kind of filter to apply to inactive buffers. Valid filter_types
 are
 - "SHADE"
 - "TINT"
+- "NOSYNTAX"
+
+#### SHADE
+Darkens the inactive buffer's highlights
+
+#### TINT
+Brightens the inactive buffers highlights
+
+#### NOSYNTAX
+Disables syntax highlighting on the inactive buffer.
 
 An example of how to use this is as follows
 

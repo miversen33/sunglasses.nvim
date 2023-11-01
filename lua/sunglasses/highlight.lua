@@ -11,7 +11,8 @@ local Highlight = {
         SATURATE = "SATURATE",
         DESATURATE = "DESATURATE",
         TINT = "TINT",
-        SHADE = "SHADE"
+        SHADE = "SHADE",
+        NOSYNTAX = "NOSYNTAX",
     },
     name = nil,
     namespace = 0,
@@ -67,25 +68,8 @@ local function clone_highlight(highlight, resolve_links, name)
     return cloned_highlight
 end
 
-function Highlight:associate()
-    return string.format("%s:%s", self.unshaded_highlight, self.name)
-end
-
-function Highlight:disassociate()
-    return string.format("%s:%s", self.name, self.unshaded_highlight)
-end
-
-function Highlight:apply(force)
-    local existing_hl = vim.api.nvim_get_hl(self.namespace, {name = self.name})
-    if not vim.tbl_isempty(existing_hl) then
-        if not force then return end
-        logger.warn("Forcibly overriding existing highlight", self.name)
-    end
-    vim.api.nvim_set_hl(self.namespace, self.name, self.highlight)
-end
-
-function Highlight:shade(shade_level)
-    local hl = clone_highlight(self.highlight, true)
+function Highlight.shade(highlight, shade_level)
+    local hl = clone_highlight(highlight, true)
     if hl then
         if hl.fg then
             hl.fg = shade_color(hl.fg, shade_level)
@@ -101,8 +85,8 @@ function Highlight:shade(shade_level)
     return hl
 end
 
-function Highlight:tint(tint_level)
-    local hl = clone_highlight(self.highlight, true)
+function Highlight.tint(highlight, tint_level)
+    local hl = clone_highlight(highlight, true)
     if hl then
         if hl.fg then
             hl.fg = tint_color(hl.fg, tint_level)
@@ -118,14 +102,44 @@ function Highlight:tint(tint_level)
     return hl
 end
 
-function Highlight:saturate(saturation_level)
+function Highlight.saturate(highlight, saturation_level)
     error("Saturation is not implemented yet!")
-    return self.highlight
+    return highlight
 end
 
-function Highlight:desaturate(desaturation_level)
+function Highlight.desaturate(highlight, desaturation_level)
     error("Desaturation is not implemented yet!")
-    return self.highlight
+    return highlight
+end
+
+function Highlight.disable(highlight, adjust_level)
+    local hl = clone_highlight(highlight, true) or {}
+    local action = "shade"
+    hl.fg = 16777215 -- #ffffff
+    hl.bg = nil
+    hl.sp = nil
+    if vim.opt.background == "light" then
+        hl.fg = 0 -- #000000
+        action = "tint"
+    end
+    return Highlight[action](hl, adjust_level)
+end
+
+function Highlight:associate()
+    return string.format("%s:%s", self.unshaded_highlight, self.name)
+end
+
+function Highlight:disassociate()
+    return string.format("%s:%s", self.name, self.unshaded_highlight)
+end
+
+function Highlight:apply(force)
+    local existing_hl = vim.api.nvim_get_hl(self.namespace, {name = self.name})
+    if not vim.tbl_isempty(existing_hl) then
+        if not force then return end
+        logger.warn("Forcibly overriding existing highlight", self.name)
+    end
+    vim.api.nvim_set_hl(self.namespace, self.name, self.highlight)
 end
 
 function Highlight:new(highlight_options)
@@ -150,14 +164,16 @@ function Highlight:new(highlight_options)
     new_highlight.unshaded_highlight = name
     local resolve_highlight_links = highlight_options.resolve_links and true or false
     new_highlight.highlight = clone_highlight(highlight_options.highlight, resolve_highlight_links, name)
-    if new_highlight.adjustment == Highlight.ADJUSTMENT_OPTIONS.SHADE then
-        new_highlight.highlight = new_highlight:shade(new_highlight.adjustment_level)
+    if new_highlight.adjustment == Highlight.ADJUSTMENT_OPTIONS.NOSYNTAX then
+        new_highlight.highlight = Highlight.disable(new_highlight.highlight, new_highlight.adjustment_level)
+    elseif new_highlight.adjustment == Highlight.ADJUSTMENT_OPTIONS.SHADE then
+        new_highlight.highlight = Highlight.shade(new_highlight.highlight, new_highlight.adjustment_level)
     elseif new_highlight.adjustment == Highlight.ADJUSTMENT_OPTIONS.TINT then
-        new_highlight.highlight = new_highlight:tint(new_highlight.adjustment_level)
+        new_highlight.highlight = Highlight.tint(new_highlight.highlight, new_highlight.adjustment_level)
     elseif new_highlight.adjustment == Highlight.ADJUSTMENT_OPTIONS.SATURATE then
-        new_highlight.highlight = new_highlight:saturate(new_highlight.adjustment_level)
+        new_highlight.highlight = Highlight.saturate(new_highlight.highlight, new_highlight.adjustment_level)
     elseif new_highlight.adjustment == Highlight.ADJUSTMENT_OPTIONS.DESATURATE then
-        new_highlight.highlight = new_highlight:desaturate(new_highlight.adjustment_level)
+        new_highlight.highlight = Highlight.desaturate(new_highlight.highlight, new_highlight.adjustment_level)
     end
     new_highlight:apply()
     return new_highlight
