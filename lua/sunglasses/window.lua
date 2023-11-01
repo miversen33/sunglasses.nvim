@@ -63,6 +63,7 @@ function Window:new(window_options)
     new_window:config(window_options)
     new_window:enable()
     windows[window_options.window] = new_window
+    vim.api.nvim_win_set_var(new_window.window, 'Sunglasses', false)
     return new_window
 end
 
@@ -92,8 +93,8 @@ function Window:update_hls(new_hls)
 end
 
 function Window:is_shaded()
-    local current_namespace = vim.api.nvim_get_hl_ns({ winid = self.window })
-    if current_namespace == self.hl_namespace and self.hl_namespace ~= 0 then
+    local sunglasses_var = vim.api.nvim_win_get_var(self.window, 'Sunglasses')
+    if sunglasses_var then
         return true
     end
     local winhighlights = vim.api.nvim_get_option_value('winhighlight', {win = self.window, scope = 'local'})
@@ -173,7 +174,7 @@ function Window:shade(opts)
     else
         vim.api.nvim_win_set_hl_ns(self.window, self.hl_namespace)
     end
-
+    vim.api.nvim_win_set_var(self.window, 'Sunglasses', true)
 end
 
 function Window:unshade(opts)
@@ -190,6 +191,8 @@ function Window:unshade(opts)
     else
         vim.api.nvim_win_set_hl_ns(self.window, 0)
     end
+    vim.api.nvim_win_set_var(self.window, 'Sunglasses', false)
+
 end
 
 function Window:disable()
