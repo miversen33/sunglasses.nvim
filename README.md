@@ -240,6 +240,16 @@ This is the kind of filter to apply to inactive buffers. Valid filter_types
 are
 - "SHADE"
 - "TINT"
+- "NOSYNTAX"
+
+#### SHADE
+Darkens the inactive buffer's highlights
+
+#### TINT
+Brightens the inactive buffers highlights
+
+#### NOSYNTAX
+Disables syntax highlighting on the inactive buffer.
 
 An example of how to use this is as follows
 
