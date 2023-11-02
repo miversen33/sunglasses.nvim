@@ -18,7 +18,8 @@ local Highlight = {
     namespace = 0,
     adjustment_level = 1,
     unshaded_highlight = nil,
-    highlight = nil
+    highlight = nil,
+    orig_highlight = {}
 }
 
 local function clamp_color_channel(color_channel)
@@ -148,6 +149,7 @@ function Highlight:new(highlight_options)
     local new_highlight = {}
     self.__index = self
     setmetatable(new_highlight, self)
+    new_highlight.orig_highlight = highlight_options.highlight
     new_highlight.adjustment = highlight_options.adjustment or Highlight.ADJUSTMENT_OPTIONS.SHADE
     new_highlight.adjustment_level = highlight_options.adjustment_level or Highlight.adjustment_level
     new_highlight.namespace = highlight_options.namespace or 0

@@ -63,6 +63,13 @@ function M.store_config(user_config)
     else
         M.__user_config.refresh_timer = math.max(M.__user_config.refresh_timer, 1)
     end
+    if vim.version().major == 0 and vim.version().minor == 9 then
+        -- I don't really know why we have to do this but for some reason
+        -- running the highlight fetcher multiple times in 
+        -- nvim 0.9.0 causes the highlights to be completely lost.
+        -- Makes no sense to me but... Here we are.
+        M.__user_config.refresh_timer = 0
+    end
 end
 
 function M.get_config()

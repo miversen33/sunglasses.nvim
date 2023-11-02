@@ -39,6 +39,7 @@ local function get_all_highlights(force)
             adjustment = user_config.filter_type,
             adjustment_level = user_config.filter_percent
         })
+        logger.trace3("Creating new Highlight in namespace", M.__hl_namespace, new_highlight)
         M.highlights[highlights_name] = new_highlight
         ::continue::
     end
@@ -79,7 +80,7 @@ local function get_all_highlights(force)
 end
 
 local function setup_timer(frequency)
-    if M.__timer then return end
+    if M.__timer or frequency <= 0 then return end
     logger.info("Setting Update Highlight Timer for", frequency, "seconds")
     frequency = frequency * 1000
     local callback = function()
@@ -101,9 +102,12 @@ local function setup_auto_commands()
         desc = "Sunglasses Lazy Setup",
         callback = function()
             get_all_highlights()
-            if defaults.get_config().refresh_timer then
-                setup_timer(defaults.get_config().refresh_timer)
+            local refresh_timer = defaults.get_config().refresh_timer
+            if not refresh_timer or refresh_timer <= 0 then
+                logger.warn("Auto highlight refresher has been disabled!")
+                return
             end
+            setup_timer(refresh_timer)
         end
     })
     logger.debug("Setting up WinEnter Command")
