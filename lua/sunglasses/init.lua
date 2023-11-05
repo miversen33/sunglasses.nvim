@@ -14,19 +14,20 @@ local M = {
     active_hls = nil,
     inactive_hls = nil,
     __last_hl_update = -1,
-    version = "0.2.01"
+    version = "0.2.02"
 }
 
 local function setup_hl_namespace()
     M.__hl_namespace = vim.api.nvim_create_namespace(M.__hl_namespace_name)
+    Window.setup(M.__hl_namespace)
+
     logger.debug("Setting up namespace", M.__hl_namespace)
 end
 
 local function get_all_highlights(force)
-    logger.trace3("Gathering all current highlights")
+    logger.trace2("Gathering all current highlights")
     local user_config = defaults.get_config()
     local highlights = vim.api.nvim_get_hl(0, {})
-    local is_same = true
     for highlights_name, highlight in pairs(highlights) do
         local excluded = defaults.is_highlight_excluded(highlights_name)
         if excluded or (M.highlights[highlights_name] and not force) then
@@ -62,21 +63,6 @@ local function get_all_highlights(force)
             M.highlights[hl] = nil
         end
     end
-    -- Nothing changed so return
-    if is_same then return end
-    M.__last_hl_update = COMPAT.luv.hrtime()
-    if M.__hl_namespace == 0 then
-        -- Since we are using the global namesapce, set these things there
-        local _active_hls = {}
-        local _inactive_hls = {}
-        logger.info("Compiling Active and Inactive Local Highlight Groups")
-        for _, hl in pairs(M.highlights) do
-            table.insert(_active_hls, hl:associate())
-            table.insert(_inactive_hls, hl:disassociate())
-        end
-        M.active_hls = table.concat(_active_hls, ',')
-        M.inactive_hls = table.concat(_inactive_hls, ',')
-    end
 end
 
 local function setup_timer(frequency)
@@ -108,33 +94,6 @@ local function setup_auto_commands()
                 return
             end
             setup_timer(refresh_timer)
-        end
-    })
-    logger.debug("Setting up WinEnter Command")
-    vim.api.nvim_create_autocmd('WinEnter', {
-        group = M.__augroup_id,
-        desc = "Sunglasses Auto Create Window",
-        callback = function(event)
-            local user_config = defaults.get_config()
-            local window = Window.get(-1)
-
-            if window and window.last_hl_update < M.__last_hl_update then
-                -- Only update the window if our last highlight update
-                -- was after the last time this window object was updated
-                window:update_hls({
-                    active_hls = M.active_hls,
-                    inactive_hls = M.inactive_hls
-                })
-            elseif not window then
-                window = Window:new({
-                    buffer = event.buf,
-                    namespace = M.__hl_namespace,
-                    excluded_filetypes = user_config.excluded_filetypes,
-                    -- Only provide these if we are in global name space
-                    active_hls = M.__hl_namespace == 0 and M.active_hls,
-                    inactive_hls = M.__hl_namespace == 0 and M.inactive_hls
-                })
-            end
         end
     })
 end

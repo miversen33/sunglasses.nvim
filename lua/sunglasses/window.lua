@@ -1,7 +1,6 @@
-local COMPAT = require('sunglasses.compat')
 local logger = require("sunglasses.log")
+local config = require("sunglasses.defaults")
 
-local configured = false
 local global_disabled = false
 local windows = {}
 local Window = {
@@ -9,18 +8,26 @@ local Window = {
     window = -1,
     buffer = -1,
     hl_namespace = 0,
-    inactive_hls = "",
-    active_hls = "",
     excluded_filetypes = {},
     excluded_filenames = {},
     last_hl_update = -1,
+    configured = false,
 }
 
 function Window.get(window_id)
     if window_id == -1 then
         window_id = vim.api.nvim_get_current_win()
     end
-    return windows[window_id]
+    local user_config = config.get_config()
+    local window = windows[window_id] 
+    if not window then
+        logger.trace2("Unable to find window for", window_id, "so we are creating a new instance for it")
+        window = Window:new({
+            namespace = Window.hl_namespace,
+            excluded_filetypes = user_config.excluded_filetypes,
+        })
+    end
+    return window
 end
 
 function Window.global_disable()
@@ -46,13 +53,18 @@ function Window.global_enable()
     end
 end
 
+function Window:delete()
+    logger.trace2("Deleting window wrapper for window number", self.window)
+    windows[self.window] = nil
+    self = nil
+end
+
 function Window:new(window_options)
     window_options = window_options or {}
     if not window_options.window then
         window_options.window = vim.api.nvim_get_current_win()
     end
-    window_options.buffer = window_options.buffer or vim.api.nvim_win_get_buf(window_options.window)
-    local new_window = Window.get(window_options.window)
+    local new_window = windows[window_options.window]
     if new_window then
         new_window:config(window_options)
         return new_window
@@ -75,75 +87,31 @@ end
 function Window:config(window_options)
     self.name = window_options.name
     self.window = window_options.window
-    self.buffer = window_options.buffer
     self.hl_namespace = window_options.namespace or self.hl_namespace
     self.excluded_filetypes = window_options.excluded_filetypes or self.excluded_filetypes
-    self.active_hls = window_options.active_hls or self.active_hls
-    self.inactive_hls = window_options.inactive_hls or self.inactive_hls
-    self.last_hl_update = COMPAT.luv.hrtime()
-end
-
-function Window:update_hls(new_hls)
-    self:config({
-        window = self.window,
-        buffer = self.buffer,
-        active_hls = new_hls.active_hls,
-        inactive_hls = new_hls.inactive_hls
-    })
 end
 
 function Window:is_shaded()
-    local sunglasses_var = vim.api.nvim_win_get_var(self.window, 'Sunglasses')
-    if sunglasses_var then
-        return true
-    end
-    local winhighlights = vim.api.nvim_get_option_value('winhighlight', {win = self.window, scope = 'local'})
-    local is_shaded = false
-    -- Iterate up to the first 10 hls. Its not a huge deal
-    -- "how" many we iterate over, but doing more than the first 10 or so 
-    -- should mostly guarantee that we hit a SunglassesShaded highlight group
-    -- if it exists. If it doesn't in the first 10, we likely aren't shaded
-    local iter_limit = 10
-    local iter_count = 0
-    for hl_pair in winhighlights:gmatch('([^,]+)') do
-        iter_count = iter_count + 1
-        local from, to
-        for hl in hl_pair:gmatch('([^:]+)') do
-            if not from then
-                from = hl
-            else
-                to = hl
-            end
-        end
-        if from and from:match('^SunglassesShaded') then
-            is_shaded = false
-            break
-        end
-        if to and to:match('^SunglassesShaded') then
-            is_shaded = true
-            break
-        end
-        if iter_count >= iter_limit then
-            break
-        end
-    end
-    return is_shaded
+    return vim.api.nvim_win_get_var(self.window, 'Sunglasses')
 end
 
 function Window:can_shade()
+    logger.trace2("Checking if we can shade window", self.window)
     if global_disabled then
         return "globally disabled"
     end
     if vim.api.nvim_win_get_var(self.window, 'SunglassesDisabled') then
         return "currently disabled"
     end
-    if not self.inactive_hls and self.hl_namespace ~= 0 then
+    if not Window.hl_namespace then
+    -- if not self.inactive_hls and self.hl_namespace ~= 0 then
         return "setting up"
     end
     if self:is_shaded() then
         return "currently shaded"
     end
-    local buffer = self.buffer
+    -- We should probably get the current buffer from the window instead of saving it...
+    local buffer = vim.api.nvim_win_get_buf(self.window)
     local buftype = vim.api.nvim_get_option_value('filetype', {buf = buffer})
     local filename = vim.fn.bufname(buffer)
     for _, excluded_filename in ipairs(self.excluded_filenames) do
@@ -165,15 +133,7 @@ function Window:shade(opts)
     if not force and not self:can_shade() then
         return
     end
-    if self.hl_namespace == 0 then
-        if not self.inactive_hls or self.inactive_hls == '' then
-            logger.warn("Look I know you want me to put on these awesome sunglasses but we have none to put on!")
-            return
-        end
-        vim.api.nvim_command('setlocal winhighlight=' .. self.inactive_hls)
-    else
-        vim.api.nvim_win_set_hl_ns(self.window, self.hl_namespace)
-    end
+    vim.api.nvim_win_set_hl_ns(self.window, self.hl_namespace)
     vim.api.nvim_win_set_var(self.window, 'Sunglasses', true)
 end
 
@@ -183,68 +143,33 @@ function Window:unshade(opts)
     if not force and not self:is_shaded() then
         return
     end
-    if not self.hl_namespace then
-        if not self.active_hls or self.active_hls == '' then
-            logger.warn("Look I know you want me to take off these awesome sunglasses but we don't have other things to put over our eyes!")
-        end
-        vim.api.nvim_command('setlocal winhighlight=' .. self.active_hls)
-    else
-        vim.api.nvim_win_set_hl_ns(self.window, 0)
-    end
+    vim.api.nvim_win_set_hl_ns(self.window, 0)
     vim.api.nvim_win_set_var(self.window, 'Sunglasses', false)
 
 end
 
 function Window:disable()
+    logger.trace2("Disabling Window Auto Shading", self.window)
     vim.api.nvim_win_set_var(self.window, 'SunglassesDisabled', true)
 end
 
 function Window:enable()
+    logger.trace2("Enabling Window Auto Shading", self.window)
     vim.api.nvim_win_set_var(self.window, 'SunglassesDisabled', false)
 end
 
-if not configured then
+function Window.setup(namespace)
+    if Window.configured then return end
+    Window.hl_namespace = namespace
     -- Do basic window configurations
     vim.api.nvim_create_augroup('Sunglasses_Window_Autocommands', {
         clear = true
-    })
-    -- Listen for filetype changes 
-    -- filtered specifically on buffers associated
-    -- with windows we are watching
-    vim.api.nvim_create_autocmd('FileType', {
-        group = "Sunglasses_Window_Autocommands",
-        desc = "Sunglasses Buffer Filetype Watcher",
-        callback = function(event)
-            local buffer = event.buf
-            local filename = vim.fn.bufname(buffer)
-            local window = Window.get(-1)
-            if not window then
-                logger.trace3("Ignoring Filetype change on buffer", buffer, "as it's not a tracked sunglasses window")
-                return
-            end
-            local can_shade_window = window:can_shade()
-            if can_shade_window == true then
-                return
-            end
-            window:disable()
-            logger.trace("Disabling window shading for", filename, "due to it being", can_shade_window)
-        end,
     })
     vim.api.nvim_create_autocmd({'WinEnter', 'BufEnter'}, {
         group = "Sunglasses_Window_Autocommands",
         desc = "Sunglasses Buffer Auto Shader",
         callback = function()
-            local winnr = vim.api.nvim_get_current_win()
-            local buffer = vim.api.nvim_win_get_buf(winnr)
-            local window = Window.get(winnr)
-            if not window then
-                logger.trace3("Ignoring window", winnr, "as it's not a tracked sunglasses window")
-                return
-            end
-            if window.buffer ~= buffer then
-                window.buffer = buffer
-            end
-            window:unshade()
+            Window.get(-1):unshade()
         end
     })
     vim.api.nvim_create_autocmd("WinLeave", {
@@ -253,17 +178,12 @@ if not configured then
         callback = function()
             -- TODO: Something about how closing buffers with Neo-tree works that
             -- is preventing WinLeave from being thrown...
-            local winnr = vim.api.nvim_get_current_win()
-            local buffer = vim.api.nvim_win_get_buf(winnr)
-            local filename = vim.fn.bufname(buffer)
-            local window = Window.get(winnr)
-            if not window then
-                logger.trace3("Ignoring window", winnr, "as it's not a tracked sunglasses window")
-                return
-            end
+            local window = Window.get(-1)
             local can_shade_window = window:can_shade()
             if can_shade_window ~= true then
-                logger.trace3("Ignoring auto shade request for buffer", filename, "as its", can_shade_window)
+                local buffer = vim.api.nvim_win_get_buf(window.window)
+                local filename = vim.fn.bufname(buffer)
+                logger.debug("Ignoring auto shade request for buffer", filename, "as its", can_shade_window)
                 -- Don't do anything with this event
                 return
             end
@@ -274,16 +194,10 @@ if not configured then
         group = "Sunglasses_Window_Autocommands",
         desc = "Sunglasses Buffer Remove Window Tracking",
         callback = function()
-            local winnr = vim.api.nvim_get_current_win()
-            local window = Window.get(winnr)
-            if not window then
-                return
-            end
-
+            Window.get(-1):delete()
         end
     })
-
-    configured = true
+    Window.configured = true
 end
 
 return Window
