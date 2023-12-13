@@ -445,7 +445,7 @@ require("sunglasses").setup(sunglasses_options)
 ### :SunglassesOn
 Version Added: 0.1  
 Valid Args: false, true  
-Related: [SunglassesOff](#sunglassesoff)  
+Related: [SunglassesOff](#sunglassesoff),[SunglassesToggle](#sunglassestoggle)  
 
 Command SunglassesOn will shade the buffer your cursor is currently in.
 
@@ -458,9 +458,15 @@ buffer, in which case it will not be shaded.
 
 ### :SunglassesOff
 Version Added: 0.1  
-Related: [SunglassesOn](#sunglasseson)  
+Related: [SunglassesOn](#sunglasseson),[SunglassesToggle](#sunglassestoggle)  
 
 Command SunglassesOff will unshade the buffer your cursor is currently in.
+
+### :SunglassesToggle
+Version Added: 0.3  
+Related: [SunglassesOff](#sunglassesoff),[SunglassesOn](#sunglasseson)  
+
+Command SunglassesToggle will toggle sunglasses on the currently focused window
 
 ### :SunglassesEnable
 Version Added: 0.1  

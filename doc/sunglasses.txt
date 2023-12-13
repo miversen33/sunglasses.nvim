@@ -336,7 +336,7 @@ An example of how to set this is as follows
 :SunglassesOn ~
 Version Added: 0.1
 Valid Args: false, true
-Related: |SunglassesOff|
+Related: |SunglassesOff| |SunglassesToggle|
 
 Command SunglassesOn will shade the buffer your cursor is currently in.
 
@@ -350,9 +350,16 @@ buffer, in which case it will not be shaded.
                                                                  *SunglassesOff*
 :SunglassesOff ~
 Version Added: 0.1
-Related: |SunglassesOn|
+Related: |SunglassesOn| |SunglassesToggle|
 
 Command SunglassesOff will unshade the buffer your cursor is currently in.
+
+                                                              *SunglassesToggle*
+:SunglassesToggle ~
+Version Added: 0.3
+Related: |SunglassesOn| |SunglassesOff|
+
+Command that toggles Sunglasses on the current window.
 
                                                               *SunglassesEnable*
 :SunglassesEnable ~

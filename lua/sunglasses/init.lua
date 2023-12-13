@@ -14,7 +14,7 @@ local M = {
     active_hls = nil,
     inactive_hls = nil,
     __last_hl_update = -1,
-    version = "0.2.02"
+    version = "0.3"
 }
 
 local function setup_hl_namespace()
@@ -177,6 +177,21 @@ local function setup_user_commands()
         end,
         {
             desc = "Resumes Sunglasses Auto Adjuster for this window"
+        }
+    )
+    logger.debug("Setting up SunglassesToggle command")
+    vim.api.nvim_create_user_command(
+        "SunglassesToggle", function()
+            local window = require("sunglasses.window").get(-1)
+            if window:is_shaded() then
+                -- Sunglasses is enabled on the window currently focused by vim
+                window:unshade()
+            else
+                window:shade()
+            end
+        end,
+        {
+            desc = "Toggles Sunglasses on the current window"
         }
     )
 end
