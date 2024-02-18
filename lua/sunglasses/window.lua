@@ -53,6 +53,14 @@ function Window.global_enable()
     end
 end
 
+function Window.global_toggle()
+    if global_disabled then
+        Window.global_enable()
+    else
+        Window.global_disable()
+    end
+end
+
 function Window:delete()
     logger.trace2("Deleting window wrapper for window number", self.window)
     windows[self.window] = nil
