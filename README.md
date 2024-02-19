@@ -475,6 +475,12 @@ Related: [SunglassesDisable](#sunglassesdisable)
 Command SunglassesEnable will shade all inactive buffers (while obeying
 excluded filetypes)
 
+### :SunglassesEnableToggle
+Version Added: 0.4  
+Related: [SunglassesToggle](#sunglassestoggle),[SunglassesEnable](#sunglassesenable),[SunglassesDisable](#sunglassesdisable)  
+
+Command SunglassesEnableToggle will actively toggle sunglasses across _all_ windows (while still obeying filetypes). This is a shortcut (with a bit of logic) to [SunglassesEnable](#sunglassesenable) and [SunglassesDisable](#sunglassesdisable)
+
 ### :SunglassesDisable
 Version Added: 0.1  
 Related: [SunglassesEnable](#sunglassesenable)
