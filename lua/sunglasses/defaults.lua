@@ -32,6 +32,7 @@ local defaults = {
         "registers",
         "startuptime",
         "OverseerList",
+        "Outline",
         "Navbuddy",
         "noice",
         "notify",
