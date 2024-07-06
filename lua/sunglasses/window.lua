@@ -19,7 +19,7 @@ function Window.get(window_id)
         window_id = vim.api.nvim_get_current_win()
     end
     local user_config = config.get_config()
-    local window = windows[window_id] 
+    local window = windows[window_id]
     if not window then
         logger.trace2("Unable to find window for", window_id, "so we are creating a new instance for it")
         window = Window:new({
@@ -173,7 +173,7 @@ function Window.setup(namespace)
     vim.api.nvim_create_augroup('Sunglasses_Window_Autocommands', {
         clear = true
     })
-    vim.api.nvim_create_autocmd({'WinEnter', 'BufEnter'}, {
+    vim.api.nvim_create_autocmd({'WinEnter', 'BufEnter', 'WinClosed'}, {
         group = "Sunglasses_Window_Autocommands",
         desc = "Sunglasses Buffer Auto Shader",
         callback = function()
