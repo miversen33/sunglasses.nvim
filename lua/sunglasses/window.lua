@@ -12,6 +12,7 @@ local Window = {
     excluded_filenames = {},
     last_hl_update = -1,
     configured = false,
+    window_can_shade_callback = nil,
 }
 
 function Window.get(window_id)
@@ -25,6 +26,7 @@ function Window.get(window_id)
         window = Window:new({
             namespace = Window.hl_namespace,
             excluded_filetypes = user_config.excluded_filetypes,
+            window_can_shade_callback = user_config.window_can_shade_callback,
         })
     end
     return window
@@ -95,6 +97,7 @@ end
 function Window:config(window_options)
     self.name = window_options.name
     self.window = window_options.window
+    self.window_can_shade_callback = window_options.window_can_shade_callback
     self.hl_namespace = window_options.namespace or self.hl_namespace
     self.excluded_filetypes = window_options.excluded_filetypes or self.excluded_filetypes
 end
@@ -118,6 +121,13 @@ function Window:can_shade()
     if self:is_shaded() then
         return "currently shaded"
     end
+
+    local diff_mode = vim.api.nvim_get_option_value('diff', { win = self.window })
+
+    if diff_mode then
+      return "currently in diff mode"
+    end
+
     -- We should probably get the current buffer from the window instead of saving it...
     local buffer = vim.api.nvim_win_get_buf(self.window)
     local buftype = vim.api.nvim_get_option_value('filetype', {buf = buffer})
@@ -132,6 +142,11 @@ function Window:can_shade()
             return "an excluded filetype"
         end
     end
+
+    if self.window_can_shade_callback ~= nil and type(self.window_can_shade_callback) == "function" then
+      return self.window_can_shade_callback(self.window)
+    end
+
     return true
 end
 
