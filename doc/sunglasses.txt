@@ -332,6 +332,13 @@ An example of how to set this is as follows
     require("sunglasses").setup(sunglasses_options)
 ><
 
+                                               *sunglasses.config.ignore_diff*
+Config.ignore_diff
+Default: true
+
+Indicates if diff windows should be ignored by plugin.
+><
+
                                                                  *SunglassesOn*
 :SunglassesOn ~
 Version Added: 0.1

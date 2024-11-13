@@ -189,7 +189,8 @@ local sunglasses_defaults = {
     excluded_highlights = {
         "WinSeparator",
         {"lualine_.*", glob = true},
-    }
+    },
+    ignore_diff = true,
 }
 
 -- The above table will is the default configuration.
@@ -442,6 +443,12 @@ local sunglasses_options = {
 }
 require("sunglasses").setup(sunglasses_options)
 ```
+
+### Config.ignore_diff
+
+Default: `true`
+
+Indicates if diff windows should be ignored by plugin.
 
 ## Commands
 
